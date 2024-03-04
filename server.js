@@ -20,7 +20,13 @@ client.on('messageCreate', async message => {
         if (message.content.includes(blackList[i]) && message.author.id != '1213767749210349588') {
             var random = Math.floor(Math.random() * 5);
             console.log("Word(s) detected ! num: " + random);
-            message.reply(templates[random]);
+            message.reply("**" + message.author.username + "**" + ": " + templates[random]);
+            if (message.content.includes("ggez")) {
+                setTimeout(function () {
+                    message.delete();
+                }, 1000);
+            }
+            break;
         }
     }
     if (message.content.includes("!add_blacklist") && message.author.id != '1213767749210349588') {
