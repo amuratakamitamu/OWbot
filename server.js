@@ -11,20 +11,9 @@ client.once(Events.ClientReady, c => {
     console.log("Startup complete. Bot is ready.");
 });
 
-//ボットが参加したときの動作
-client.on('guildCreate', async (guild) => {
-    const defaultChannel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'));;//連想配列にサーバーに対応するdefaultチャンネルを追加
-    if (defaultChannel) {
-        channels[guild.id] = defaultChannel.id;
-        defaultChannel.send('俺は早いぜ。');
-        defaultChannel.send("使い方を見るには、`!help`を送信してくれ。");
-    }
-    console.log("Bot joined");
-});
-
 var templates = ["ナイスゲーム!みんなこれからも頑張ってね!", "うん、やっぱ楽しくプレイすることが何よりも大事だよね", "いいでしょ、お母さん!あと5分だけやらせてよ!あ、間違えた", "すごい楽しかったよ!ナイスゲーム!", "もうおネンネの時間は過ぎてるけど...お母さんには内緒だよ"];
 
-var blackList = ["ggez"]
+var blackList = ["ggez"];
 
 client.on('messageCreate', async message => {
     for (let i = 0; i < blackList.length; i++) {
@@ -42,6 +31,13 @@ client.on('messageCreate', async message => {
     }
     if (message.content.includes("!help")) {
         await message.reply("ブラックリストに単語を登録するには、 `!add_blacklist {ブラックリストに登録したい単語}` を送信してください。(コマンドと単語の間には半角スペースが必要です。)");
+        await message.reply("ブラックリストに登録された単語をリセットするには `!clear_blacklist` を送信してください。(ggezはデフォルトでオンなので消すことはできません。)");
+        console.log("!help command detected");
+    }
+    if (message.content.includes("!clear_blacklist") && message.author.id != '1213767749210349588') {
+        blackList = ["ggez"];
+        await message.reply("ブラックリストがリセットされました。");
+        console.log("The blacklist was cleared.");
     }
 });
 
